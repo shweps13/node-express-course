@@ -1,0 +1,1 @@
+console.log(process.env.HELLO_VAR, "from", __dirname)
