@@ -21,18 +21,18 @@ const getBody = (req, callback) => {
 };
 
 // here, you could declare one or more variables to store what comes back from the form.
-let item = "Enter something below.";
+let item = "Enter a number below.";
 
 // here, you can change the form below to modify the input fields and what is displayed.
 // This is just ordinary html with string interpolation.
 const form = () => {
   return `
   <body>
-  <p>${item}</p>
-  <form method="POST">
-  <input name="item"></input>
-  <button type="submit">Submit</button>
-  </form>
+    <p>${item}</p>
+    <form method="POST">
+      <input name="item" placeholder="Enter number"></input>
+      <button type="submit">Submit</button>
+    </form>
   </body>
   `;
 };
@@ -45,7 +45,17 @@ const server = http.createServer((req, res) => {
       console.log("The body of the post is ", body);
       // here, you can add your own logic
       if (body["item"]) {
-        item = body["item"];
+        const num = Number(body["item"]);
+
+        if (Number.isNaN(num)) {
+          item = `"${body["item"]}" is not a number. Please enter a number.`;
+        } else {
+          if (num % 2 === 0) {
+            item = `The number ${num} is EVEN.`;
+          } else {
+            item = `The number ${num} is ODD.`;
+          }
+        }
       } else {
         item = "Nothing was entered.";
       }
