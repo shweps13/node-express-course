@@ -1,0 +1,28 @@
+<h1>Productrs fetcher</h1>
+
+<button id="fetchData">Fetch Products</button>
+
+<div id="products"></div>
+
+<script>
+  const btn = document.getElementById("fetchData");
+  const productsDiv = document.getElementById("products");
+
+  const getProducts = async () => {
+    try {
+      const res = await fetch("/api/v1/products");
+      const data = await res.json();
+
+      let fetched = '';
+      data.products.forEach((product) => {
+        fetched += `<p>${product.name} - $${product.price}</p>`;
+      });
+
+      productsDiv.innerHTML = fetched;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  btn.addEventListener("click", getProducts);
+</script>
