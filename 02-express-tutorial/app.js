@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
 const port = 3000
 
@@ -8,10 +9,21 @@ const productsRouter = require("./routes/products")
 
 
 const logger = (req, res, next) => {
-  console.log(`${req.method} -> ${req.url}`);
-  next();
+    console.log(`${req.method} -> ${req.url}`);
+    next();
+}
+const auth = (req, res, next) => {
+    const userName = req.cookies.name;
+
+    if (!userName) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    console.log(`${userName} -> Authorized!`);
+    next();
 }
 
+
+app.use(cookieParser());
 app.use(express.static("./methods-public"))
 app.use(logger)
 app.use(express.urlencoded({ extended: false }));
@@ -21,7 +33,22 @@ app.use("/api/v1/people", peopleRouter);
 app.use("/api/v1/products", productsRouter);
 
 
-app.get('/api/v1/test', (req, res) => {
+app.post('/logon', (req, res) => {
+    const name = req.body.name;
+    if (!name) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    res.cookie("name", req.body.name)
+    res.status(200).json({ success: true });
+})
+
+app.delete('/logoff', (req, res) => {
+    res.clearCookie("name")
+    res.status(200).json({ success: true });
+})
+
+app.get('/api/v1/test', auth, (req, res) => {
     res.json({ message: "It worked!" });
 })
 
