@@ -1,7 +1,7 @@
-require('./db/connect')
+require('dotenv').config()
 const express = require('express');
 const app = express();
-const port = 3000
+const connectDB = require('./db/connect')
 
 const tasks = require('./routes/tasks')
 
@@ -15,4 +15,14 @@ app.get('/hello', (req, res) => {
     res.send('Test')
 })
 
-app.listen(port, console.log(`started on ${port}`))
+const port = 3000
+const start = async () => {
+    try {
+        await connectDB()
+        app.listen(port, console.log(`started on ${port}`))
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+start()
