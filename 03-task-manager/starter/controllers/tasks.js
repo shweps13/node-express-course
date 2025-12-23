@@ -14,7 +14,7 @@ const createTask = async (req, res) => {
     res.status(201).json({ task })
 }
 const getTask = async (req, res) => {
-    const task = await Task.findOne({ name: req.params.id })
+    const task = await Task.findById(req.params.id)
     if (task) {
         res.status(201).json({ task })
     } else {
