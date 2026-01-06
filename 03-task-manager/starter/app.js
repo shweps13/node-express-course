@@ -6,14 +6,10 @@ const connectDB = require('./db/connect')
 const tasks = require('./routes/tasks')
 
 app.use(express.json())
+app.use(express.static('./public'))
 
 app.use('/api/v1/tasks', tasks)
 
-
-
-app.get('/hello', (req, res) => {
-    res.send('Test')
-})
 
 const port = 3000
 const start = async () => {
