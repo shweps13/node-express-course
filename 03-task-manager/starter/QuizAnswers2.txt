@@ -1,0 +1,15 @@
+1.  
+    "asyncWrapper" was created and applied to reduce amount of the code inside of the Tasks controller. 
+    Each function there is async, so we can apply a middleware to make it cleaner.
+
+2. 
+    This is already implemented inside of the "getTask" function:
+
+const getTask = asyncWrapper(async (req, res, next) => {  
+  const { id: taskID } = req.params;  
+  const task = await Task.findOne({ _id: taskID });  
+  if (!task) {
+    return next(createCustomError(`No ${req.params.id} task founded`, 404))
+  }
+  res.status(200).json({ task });  
+});  
